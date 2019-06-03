@@ -1,0 +1,11 @@
+<div style="text-align:center">
+    <h1>
+      Pizza Order!
+    </h1>
+  </div>
+
+<mat-card *ngFor="let pizza of pizzas$ | async" class="pizza-card">
+  <app-pizza-single [pizza]="pizza"></app-pizza-single>
+<mat-divider></mat-divider>
+<br>
+<button mat-raised-button color="primary" (click)="createPizza()">Create New Pizza</button>

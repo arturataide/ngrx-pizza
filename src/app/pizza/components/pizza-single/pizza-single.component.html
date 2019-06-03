@@ -1,0 +1,27 @@
+<mat-card-header>
+  <mat-card-title>
+      {{ pizza.name }}
+  </mat-card-title>
+  <mat-card-subtitle>
+    {{ pizza.id }}
+  </mat-card-subtitle>
+  <h3></h3>
+</mat-card-header>
+<img mat-card-image src="../../../assets/images/pizza-{{pizza.size}}.jpg" class="pizza-img" alt="Pizza {{ pizza.size }}">
+<mat-card-content>
+  <p><strong>Name:</strong> {{ pizza.name }} - <i>{{ pizza.size }}</i></p>
+</mat-card-content>
+
+<mat-card-actions>
+    <button mat-raised-button color="primary" *ngIf="pizza.size === 'small'"
+        (click)="updatePizza(pizza.id, 'large', 'Update Large')">
+      Upgrade to Large Pizza
+    </button>
+    <button  mat-raised-button color="primary" *ngIf="pizza.size === 'large'"
+            (click)="updatePizza(pizza.id, 'small', 'Update Small')">
+      Downgrade to Small Pizza
+    </button>&nbsp;&nbsp;
+    <button mat-raised-button color="warn" (click)="deletePizza(pizza)">Delete Pizza</button>
+  </mat-card-actions>
+
+</mat-card>
