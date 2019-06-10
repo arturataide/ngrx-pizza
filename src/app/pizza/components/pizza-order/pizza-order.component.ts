@@ -1,10 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
-import * as actions from '../../store/actions/pizza.actions';
-import * as fromPizza from '../../store/reducers/pizza.reducer';
 import { Observable } from 'rxjs';
 import { Pizza } from '../../models/pizza.model';
-import * as fromSelectors from '../../store/selectors/pizza.selectors';
+import { PizzasService } from '../../services';
 
 @Component({
     selector: 'pizza-order',
@@ -13,38 +10,28 @@ import * as fromSelectors from '../../store/selectors/pizza.selectors';
 })
 export class PizzaOrderComponent implements OnInit {
     pizzas$: Observable<Pizza[]>;
+    laoding$: Observable<boolean>;
 
-    constructor(private store: Store<fromPizza.PizzaState>) {}
+    constructor(private pizzasService: PizzasService) {
+        this.pizzas$ = this.pizzasService.entities$;
+        this.laoding$ = this.pizzasService.loading$;
+        console.log('pizzas', this.pizzas$);
+    }
 
     ngOnInit() {
-        this.store.dispatch(new actions.LoadPizzas());
-        this.pizzas$ = this.store.select(fromSelectors.getAllPizzas);
+        this.getPizzas();
     }
 
-    createPizza() {
-        const pizza: Pizza = {
-            id: new Date().getUTCMilliseconds().toString(),
-            size: 'small',
-            name: 'New Pizza',
-        };
-
-        this.store.dispatch(new actions.CreatePizza(pizza));
+    getPizzas() {
+        this.pizzasService.getAll();
     }
 
-    updatePizza(id: string, size: string, name: string) {
-        const pizza: Pizza = {
-            id,
-            size,
-            name,
-        };
-        const updatePizza = {
-            id,
-            changes: pizza,
-        };
-        this.store.dispatch(new actions.UpdatePizza(updatePizza));
+    createPizza(pizza: Pizza) {
+        this.pizzasService.add(pizza);
     }
 
-    deletePizza(pizza) {
-        this.store.dispatch(new actions.DeletePizza(pizza));
+    createPizzaHelper() {
+        const id = String(Math.floor(Math.random() * 100));
+        this.createPizza(new Pizza(id, 'small', 'New Pizza' + id));
     }
 }
