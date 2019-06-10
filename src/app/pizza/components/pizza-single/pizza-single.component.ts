@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Pizza } from '../../models/pizza.model';
+import { PizzasService } from '../../services';
 
 @Component({
   selector: 'app-pizza-single',
@@ -8,10 +9,18 @@ import { Pizza } from '../../models/pizza.model';
 })
 export class PizzaSingleComponent implements OnInit {
   @Input() pizza: Pizza;
-  constructor() { }
+  constructor(private pizzasService: PizzasService) { }
 
   ngOnInit() {
-    console.log(this.pizza);
+  }
+
+  deletePizza(pizza: Pizza) {
+    this.pizzasService.delete(pizza);
+  }
+
+  updatePizza(pizza: Pizza, size: string) {
+    pizza.size = size;
+    this.pizzasService.update(pizza);
   }
 
 }
